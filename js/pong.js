@@ -12,6 +12,7 @@ let comScore = new Audio("sounds/userScore.mp3");
 
 const width = 400;
 const height = 600;
+const requiredScore = 5;
 
 // canvas width and height
 canvas.width = width;
@@ -212,12 +213,46 @@ function render() {
 }
 
 function game() {
-    update();
-    render();
+    if (com.score < requiredScore && user.score < requiredScore) {
+        update();
+        render();
+    }
+
+    else if (com.score >= requiredScore || user.score >= requiredScore) {
+        gameOver();
+        return;
+    }
+    
+}
+
+function gameOver() {
+        // clear the canvas
+        drawRect(0, 0, canvas.width, canvas.height, "#005236");
+        // draw computer winner message
+        drawText("GAME OVER", canvas.width/2 - 58, canvas.height/2, "#FFF", "25px fantasy");
+
+        if (com.score > user.score) {
+            // draw computer win message
+            drawText("COMPUTER WIN", canvas.width/2 - 80, canvas.height/2 + 30, "yellow", "25px fantasy");
+        }
+
+        else if (com.score < user.score) {
+            // draw user win message
+            drawText("USER WIN", canvas.width/2 - 52, canvas.height/2 + 30, "yellow", "25px fantasy");
+        }
+
+        else {
+            // draw match tie message
+            drawText("MATCH TIE", canvas.width/2 - 55, canvas.height/2 + 30, "yellow", "25px fantasy");
+        }
 }
 
 function beforeStart() {
-    drawText("PRESS ENTER TO START THE GAME", canvas.width/2 - 125, canvas.height/2, "#FFF", "20px fantasy");
+    // clear the canvas
+    drawRect(0, 0, canvas.width, canvas.height, "#005236");
+
+    // draw message before starting game
+    drawText("PRESS ENTER TO START THE GAME", canvas.width/2 - 158, canvas.height/2, "#FFF", "25px fantasy");
 }
 
 beforeStart();
@@ -228,6 +263,6 @@ let framePerSecond = 50;
 document.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
         // call the game function 50 times every 1 Sec
-        let loop = setInterval(game, 1000/framePerSecond);
+        setInterval(game, 1000/framePerSecond);
     }
 })
